@@ -7,4 +7,4 @@ def print_f(string):
     print(string)
     
     
-print_f("Hola jjarita");
+print_f("Hewwo");
