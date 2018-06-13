@@ -4,6 +4,8 @@ Created on 04-06-2018
 @author: mario
 '''
 
+import random
+
 class balancer(object):
     '''
     classdocs
@@ -17,6 +19,6 @@ class balancer(object):
         self.number_of_servers = number_of_servers
         
     def assign_load(self): #este metodo entrega el usuario entrante a uno de los servidores por medio de algun criterio (puede ser random)
-        
+        return random.choice(range(0,self.number_of_servers))
         
     
