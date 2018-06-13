@@ -11,13 +11,12 @@ if __name__ == '__main__':
         not_porn.beautiful_thig(sys.argv[1])
     
     events = scheduler() 
-    print(events.pop_event())
-    events.push_event(10, 1, 10)
-    events.push_event(11, 1, 15)
-    events.push_event(11, 2, 9)
-    events.push_event(20, 4, 100)
-    events.push_event(1, 4, 25)
-    events.push_event(5, 5, 26)
+    events.push_event(10, 10)
+    events.push_event(11, 15)
+    events.push_event(11, 9)
+    events.push_event(20, 100)
+    events.push_event(1, 25)
+    events.push_event(5, 26)
     
     for x in range(0,15):
         print(events.pop_event())
