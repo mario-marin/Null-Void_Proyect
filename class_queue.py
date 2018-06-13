@@ -28,7 +28,7 @@ class queue_layer(object):
         return random.choice(range(0,self.numero_de_colas))
         
     def queue_full_query(self,queue_id):
-        if self.queue_list[queue_id][0] > self.queue_list[queue_id][1]: #si la capacidad es mayor al uso
+        if self.queue_list[queue_id][0] <= self.queue_list[queue_id][1]: #si la capacidad es mayor al uso
             return True
         else:
             return False
@@ -46,7 +46,7 @@ class queue_layer(object):
         self.queue_list[queue_id][2].sort()
         print(self.queue_list[queue_id][2])
         
-    def pop_cola(self,queue_id): #metodo ingresa a el usuario siguiente a el sistema (este usuario debe ser atendido y no puede ser rechazado por el server)
+    def pop_queue(self,queue_id): #metodo ingresa a el usuario siguiente a el sistema (este usuario debe ser atendido y no puede ser rechazado por el server)
         self.queue_list[queue_id][1] = self.queue_list[queue_id][1] - 1
         print(self.queue_list[queue_id][2].pop(0))
         
@@ -61,6 +61,7 @@ class queue_layer(object):
                     break
             while index != 0:
                 index  = index - 1
+                self.queue_list[x][1] = self.queue_list[x][1] - 1
                 self.queue_list[x][2].pop(0)
     
         

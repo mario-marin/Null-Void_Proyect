@@ -12,12 +12,12 @@ if __name__ == '__main__':
         not_porn.beautiful_thig(sys.argv[1])
     
     events = scheduler() 
-    events.push_event(10, 10)
-    events.push_event(11, 15)
-    events.push_event(11, 9)
-    events.push_event(20, 100)
-    events.push_event(1, 25)
-    events.push_event(5, 26)
+    events.push_event(10,1, 10)
+    events.push_event(11,1, 15)
+    events.push_event(11,1, 9)
+    events.push_event(20,1, 100)
+    events.push_event(1, 1,25)
+    events.push_event(5, 1,26)
     
     for x in range(0,15):
         print(events.pop_event())
@@ -32,7 +32,5 @@ if __name__ == '__main__':
     
     for x in range(0,10):
         queue_layer.pop_cola(0)
-    
-    
     
     pass
