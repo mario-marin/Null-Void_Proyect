@@ -27,9 +27,12 @@ if __name__ == '__main__':
     
     for x in range(0,20):
         queue_layer.add_to_queue( 0, 0)
-    
+    queue_layer.update_queue( 20)
+    print(queue_layer.queue_list[0][2])
     
     for x in range(0,10):
         queue_layer.pop_cola(0)
+    
+    
     
     pass

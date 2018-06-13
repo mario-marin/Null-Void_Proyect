@@ -50,5 +50,17 @@ class queue_layer(object):
         self.queue_list[queue_id][1] = self.queue_list[queue_id][1] - 1
         print(self.queue_list[queue_id][2].pop(0))
         
+    def update_queue(self,sim_time):
+        
+        for x in range(0,len(self.queue_list)):
+            index = 0
+            for i in range(0,len(self.queue_list[x][2])):
+                if self.queue_list[x][2][i] < sim_time:
+                    index = index + 1
+                else:
+                    break
+            while index != 0:
+                index  = index - 1
+                self.queue_list[x][2].pop(0)
     
         
