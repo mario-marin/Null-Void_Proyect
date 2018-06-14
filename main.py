@@ -27,7 +27,7 @@ if __name__ == '__main__':
     arrivals = 0
         
     '''
-    
+    #potato
     events = scheduler() 
     events.push_event(10,1, 10)
     events.push_event(11,1, 15)
