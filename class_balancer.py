@@ -18,7 +18,7 @@ class balancer(object):
         '''
         self.number_of_servers = number_of_servers
         
-    def assign_load(self,servers_state): #este metodo entrega el usuario entrante a uno de los servidores por medio de algun criterio (puede ser random)
+    def assign_load(self,servers_state ): #este metodo entrega el usuario entrante a uno de los servidores por medio de algun criterio (puede ser random)
         if len(servers_state) == 0: # da lo mismo cual escojer por q estan todos cagados
             return random.choice(range(0,self.number_of_servers))
         else:

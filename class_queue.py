@@ -26,6 +26,12 @@ class queue_layer(object):
     
     def select_queue(self): #metodo decide a que cola enviar al usuario entrante (enviedo desde el server), si todas las colas estan en la pasta entonses botar la coneccion (bloqueo)
         return random.choice(range(0,self.numero_de_colas))
+    
+    def select_queue_2(self,queue_state): #este metodo entrega el usuario entrante a uno de los servidores por medio de algun criterio (puede ser random)
+        if len(queue_state) == 0: # da lo mismo cual escojer por q estan todos cagados
+            return random.choice(range(0,self.numero_de_colas))
+        else:
+            return random.choice(queue_state)
         
     def queue_full_query(self,queue_id):
         if self.queue_list[queue_id][0] <= self.queue_list[queue_id][1]: #si la capacidad es mayor al uso
@@ -38,6 +44,16 @@ class queue_layer(object):
             return True
         else:
             return False
+        
+    def not_empty_queue_list(self):
+        
+        not_empty_queue = range(0,self.numero_de_colas)
+        
+        for queue_id in range(0,self.numero_de_colas):
+            if self.queue_list[queue_id][1] == 0:
+                not_empty_queue.remove(queue_id)
+        return not_empty_queue    
+    
         
     def add_to_queue(self,queue_id,sim_time):
         desertion_time = numpy.random.exponential(self.tasa_de_abandono) + sim_time
