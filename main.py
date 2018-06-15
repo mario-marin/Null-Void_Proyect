@@ -7,6 +7,7 @@ from scheduler import scheduler
 from class_queue import queue_layer
 from class_server import server_layer
 from class_balancer import balancer
+import config_loader
 import not_porn
 import sys
 import numpy
@@ -25,38 +26,13 @@ if __name__ == '__main__':
         
     stop_condition = int(sys.argv[1])
     arrivals = 0
-        
-    '''
-    #potato
-    events = scheduler() 
-    events.push_event(10,1, 10)
-    events.push_event(11,1, 15)
-    events.push_event(11,1, 9)
-    events.push_event(20,1, 100)
-    events.push_event(1, 1,25)
-    events.push_event(5, 1,26)
-    
-    for x in range(0,15):
-        print(events.pop_event())
-        
-        
-    queue_layer = queue_layer(1,5,100)
-    
-    for x in range(0,20):
-        queue_layer.add_to_queue( 0, 0)
-    queue_layer.update_queue( 20)
-    print(queue_layer.queue_list[0][2])
-    
-    for x in range(0,10):
-        queue_layer.pop_cola(0)
-    '''
     
     #---------------config load block--------------------
-        #TODO
+    data = config_loader.load_config()
     events = scheduler() 
-    queues = queue_layer(1,5,100)
-    servers = server_layer(2, 10)
-    switch = balancer(2)
+    servers = server_layer(data[0][0], data[0][1])
+    queues = queue_layer(data[1][0],data[1][1],data[1][2])
+    switch = balancer(data[0][0])
         
     #-------------------init block-----------------------
     sim_time = 0

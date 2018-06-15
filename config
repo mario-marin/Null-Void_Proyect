@@ -1,7 +1,0 @@
-#server config: numero de servidores, tasa de atencion, capacidad del servidor
-10 5 100
-
-#balancer config: este es practicamente ideal por ende actualmente no posee parametros fuera de el numero maximo de servidores
-10
-
-#queue config: numero de colas, capacidad de las colas, tasa de dessercion, tasa de reintento (re ingreso al sistema)

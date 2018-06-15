@@ -7,6 +7,12 @@ Created on 04-06-2018
 
 
 def load_config(): #leo el archivo y estraigo los numeritos y despues los retorno en una lista [datos_server,datos_queue,balaner-data]
+    data = []
+    config_location = './config.txt'
     
-    return data #XD
+    file_flag = open(config_location,'r')
+    
+    for x in file_flag.readlines():
+        data.append([int(i) for i in x.split()])
+    return data 
     

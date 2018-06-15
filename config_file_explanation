@@ -1,0 +1,10 @@
+#server config: numero de servidores, capacidad del servidor
+2 10
+
+#queue config: numero de colas, capacidad de las colas, tasa de dessercion
+1 5 100
+
+#la configuracion tiene q ir en ese orden, ejemplo:
+
+2 10
+1 5 100
