@@ -47,7 +47,7 @@ class queue_layer(object):
         
     def not_empty_queue_list(self):
         
-        not_empty_queue = range(0,self.numero_de_colas)
+        not_empty_queue = list(range(0,self.numero_de_colas))
         
         for queue_id in range(0,self.numero_de_colas):
             if self.queue_list[queue_id][1] == 0:

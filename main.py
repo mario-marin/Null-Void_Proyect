@@ -83,7 +83,7 @@ if __name__ == '__main__':
         if current_event[0] == 1:
             arrivals = arrivals + 1
             list_2 = servers.available_servers_list_query()
-            server_id = balancer.assign_load(list_2 )
+            server_id = switch.assign_load(list_2 )
             if servers.server_full_query(server_id):
                 id_queue = queues.select_queue()
                 if queues.queue_full_query(id_queue):

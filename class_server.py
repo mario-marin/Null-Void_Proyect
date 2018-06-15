@@ -23,7 +23,7 @@ class server_layer(object):
        
        
     def server_full_query(self,server_id):
-        if self.server_list[server_id][2] <= self.server_list[server_id][1]:
+        if self.server_list[server_id][1] <= self.server_list[server_id][0]:
             return True
         else:
             return False  
