@@ -60,9 +60,8 @@ if __name__ == '__main__':
         
     #-------------------init block-----------------------
     sim_time = 0
-    for x in range(0,servers.number_of_servers):
-        for i in range(0,servers.capacity):
-            events.push_event(1, None, exp_rand(50))
+    for x in range(0,50):
+        events.push_event(1, None, exp_rand(50))
     
     #--------------------simulator-----------------------
     
@@ -72,30 +71,30 @@ if __name__ == '__main__':
     while stop_condition > arrivals:
     
         current_event = events.pop_event()
-        print(current_event)
+        #print(current_event)
         if current_event[2] != sim_time:
             sim_time = current_event[2]
         
         queues.update_queue(sim_time)
         
-        events.push_event(1,None , exp_rand(50))
+        #events.push_event(1,None , exp_rand(50))
         
         if current_event[0] == 1:
             arrivals = arrivals + 1
-            list_2 = servers.available_servers_list_query()
-            server_id = switch.assign_load(list_2 )
+            server_id = switch.assign_load(servers.available_servers_list_query() )
             if servers.server_full_query(server_id):
                 id_queue = queues.select_queue()
                 if queues.queue_full_query(id_queue):
                     events.push_event(1, None, exp_rand(50))
                     bloked = bloked + 1
+                    print("bloked user")
                 else:
                     queues.add_to_queue(id_queue, sim_time)
             else:
                 servers.increase_usage(server_id)
                 events.push_event(0, server_id, exp_rand(50))
         else:
-            if len(queues.not_empty_queue_list()) != 0:
+            if len(queues.not_empty_queue_list()) == 0:
                 servers.decrease_usage(current_event[1])
             else:
                 id_queue = queues.select_queue_2(queues.not_empty_queue_list())

@@ -60,7 +60,7 @@ class queue_layer(object):
         self.queue_list[queue_id][1] = self.queue_list[queue_id][1] + 1
         self.queue_list[queue_id][2].append(desertion_time)
         self.queue_list[queue_id][2].sort()
-        print(self.queue_list[queue_id][2])
+        print("added to queue")
         
     def pop_queue(self,queue_id): #metodo ingresa a el usuario siguiente a el sistema (este usuario debe ser atendido y no puede ser rechazado por el server)
         self.queue_list[queue_id][1] = self.queue_list[queue_id][1] - 1
