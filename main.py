@@ -14,8 +14,8 @@ import numpy
 
 
 
-def exp_rand(beta):
-    return numpy.random.exponential(beta)
+def exp_rand(rate):
+    return numpy.random.exponential(1/rate)
 
 
 
@@ -36,13 +36,16 @@ if __name__ == '__main__':
         
     #-------------------init block-----------------------
     sim_time = 0
-    for x in range(0,50):
-        events.push_event(1, None, exp_rand(50))
+    alfa = 200
+    beta = 50
+    
+    events.push_event(1, None, exp_rand(alfa))
     
     #--------------------simulator-----------------------
     
     atendidos = 0
     bloked = 0
+    
     
     while stop_condition > arrivals:
     
@@ -58,25 +61,30 @@ if __name__ == '__main__':
         if current_event[0] == 1:
             arrivals = arrivals + 1
             server_id = switch.assign_load(servers.available_servers_list_query() )
+            events.push_event(1, None, exp_rand(alfa))
+            print("llegada")
             if servers.server_full_query(server_id):
                 id_queue = queues.select_queue()
                 if queues.queue_full_query(id_queue):
-                    events.push_event(1, None, exp_rand(50))
                     bloked = bloked + 1
                     print("bloked user")
                 else:
                     queues.add_to_queue(id_queue, sim_time)
             else:
                 servers.increase_usage(server_id)
-                events.push_event(0, server_id, exp_rand(50))
+                events.push_event(0, server_id, exp_rand(beta))
         else:
+            print("salida")
             if len(queues.not_empty_queue_list()) == 0:
                 servers.decrease_usage(current_event[1])
             else:
                 id_queue = queues.select_queue_2(queues.not_empty_queue_list())
-                events.push_event(0, current_event[1], exp_rand(50))
+                queues.pop_queue(id_queue)
+                events.push_event(0, current_event[1], exp_rand(beta))
             atendidos = atendidos + 1
-            events.push_event(1, None, exp_rand(50))
-            
+    
+    print("arrivals: " + str(arrivals))
+    print("bloked: " + str(bloked))
+    print("atendidos: " + str(atendidos))
     print(bloked/atendidos)
     pass
