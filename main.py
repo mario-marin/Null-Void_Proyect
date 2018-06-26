@@ -36,8 +36,8 @@ if __name__ == '__main__':
         
     #-------------------init block-----------------------
     sim_time = 0
-    alfa = 200
-    beta = 50
+    alfa = 200 #tasa de arrivos
+    beta = 50  #tasa de salidas
     
     events.push_event(1, None, exp_rand(alfa))
     
@@ -50,38 +50,36 @@ if __name__ == '__main__':
     while stop_condition > arrivals:
     
         current_event = events.pop_event()
-        #print(current_event)
         if current_event[2] != sim_time:
             sim_time = current_event[2]
         
         queues.update_queue(sim_time)
         
-        #events.push_event(1,None , exp_rand(50))
         
         if current_event[0] == 1:
-            arrivals = arrivals + 1
-            server_id = switch.assign_load(servers.available_servers_list_query() )
-            events.push_event(1, None, exp_rand(alfa))
+            arrivals = arrivals + 1 #se aumenta las llegadas
+            server_id = switch.assign_load(servers.available_servers_list_query()) #selecion de server
+            events.push_event(1, None, exp_rand(alfa)) #nueva llegada
             print("llegada")
-            if servers.server_full_query(server_id):
-                id_queue = queues.select_queue()
-                if queues.queue_full_query(id_queue):
-                    bloked = bloked + 1
+            if servers.server_full_query(server_id): #servidor lleno?
+                id_queue = queues.select_queue() #selecionar fila
+                if queues.queue_full_query(id_queue): #fila llena?
+                    bloked = bloked + 1 #blokeado
                     print("bloked user")
                 else:
-                    queues.add_to_queue(id_queue, sim_time)
+                    queues.add_to_queue(id_queue, sim_time) # se agrega a fila
             else:
-                servers.increase_usage(server_id)
-                events.push_event(0, server_id, exp_rand(beta))
+                servers.increase_usage(server_id) #se atiende al man, aumenta el uso del server
+                events.push_event(0, server_id, exp_rand(beta)) #se genera salida
         else:
             print("salida")
-            if len(queues.not_empty_queue_list()) == 0:
-                servers.decrease_usage(current_event[1])
+            if len(queues.not_empty_queue_list()) == 0: #las fials estan vacias?
+                servers.decrease_usage(current_event[1]) #se disminulle el uso del server
             else:
-                id_queue = queues.select_queue_2(queues.not_empty_queue_list())
-                queues.pop_queue(id_queue)
-                events.push_event(0, current_event[1], exp_rand(beta))
-            atendidos = atendidos + 1
+                id_queue = queues.select_queue_2(queues.not_empty_queue_list()) #se seleciona fila no vacia
+                queues.pop_queue(id_queue) #se saca un man de esa fila selecionada
+                events.push_event(0, current_event[1], exp_rand(beta)) #se agrega salida
+            atendidos = atendidos + 1 #aumenta el numero de manes atendidos satisfactoriamente
     
     print("arrivals: " + str(arrivals))
     print("bloked: " + str(bloked))
