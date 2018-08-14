@@ -11,20 +11,36 @@ import config_loader
 import not_porn
 import sys
 import numpy
+import math
+from datetime import datetime
 
 
 
 def exp_rand(rate):
     return numpy.random.exponential(1/rate)
 
+def save_results(temp_data):
+    file=str(datetime.now())
+    file_time = file
+    file=file.replace(" ", "_")
+    file=file.replace(":", "-")
+    file=file.replace(".", "-")
+    
+    f= open("./saved_timelines/"+file+".txt","w+")
+    f.write("#timeline created on: "+file_time+"\n")
+    
+    
+    
 
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
+    if len(sys.argv) == 2:
         not_porn.beautiful_thig(sys.argv[1])
     else:
-        print("Usage: python main.py {parada}")
+        if len(sys.argv) != 3:
+            print("Usage: python main.py {tasa de llegada (float)} {tasa de salida(float)}")
+            sys.exit(0)
         
         
     stop_condition = int(sys.argv[1])
@@ -39,8 +55,11 @@ if __name__ == '__main__':
         
     #-------------------init block-----------------------
     sim_time = 0
-    alfa = 200000 #tasa de arrivos (mientra mas ma rapido) 
-    beta = 500  #tasa de salidas
+    #alfa = 20000 #tasa de arrivos (mientra mas ma rapido) 
+    #beta = 50  #tasa de salidas
+    
+    alfa = float(sys.argv[1])
+    beta = float(sys.argv[2])
     
     events.push_event(1, None, exp_rand(alfa))
     
@@ -49,8 +68,15 @@ if __name__ == '__main__':
     atendidos = 0
     bloked = 0
     
+    z_alfa_2 = 3.08 # 99.9% de confiavilidad
+    RE_dato = 0.001 # 0.1% de error
     
-    while stop_condition > arrivals:
+    
+    IC = 1000000
+    ER = 100
+    
+    
+    while (IC > ER):
     
         current_event = events.pop_event()
         if current_event[2] != sim_time:
@@ -87,6 +113,10 @@ if __name__ == '__main__':
                 events.push_event(0, current_event[1], sim_time+exp_rand(beta)) #se agrega salida
                 #print(queues.queue_list[0].list)
             atendidos = atendidos + 1 #aumenta el numero de manes atendidos satisfactoriamente
+        prob = bloked/arrivals
+        if prob != 0 and prob != 1:
+            IC = z_alfa_2 * math.sqrt(prob*(1-prob)/arrivals)
+        ER = prob*RE_dato/2
     
     print("arrivals: " + str(arrivals))
     print("bloked: " + str(bloked))
@@ -97,5 +127,9 @@ if __name__ == '__main__':
     print("Numero de usuarios que abandonaron a las colas: "+ str(queues.abandonos))
     print("Numero de usuarios que fueron atendidos desde las colas: "+ str(queues.atendidos))
     print("probabilidad de abandono: " +str(queues.abandonos/queues.llegadas))
+    
+    temp_data = [arrivals,bloked,atendidos,bloked/atendidos,bloked/arrivals,queues.llegadas,queues.abandonos,queues.atendidos,queues.abandonos/queues.llegadas]
+    
+    
     
     pass

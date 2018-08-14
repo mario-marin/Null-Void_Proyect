@@ -10,7 +10,7 @@ import random
 
 class queue:
     def __init__(self,capacidad_de_colas):
-        self.capacidad = capacidad_de_colas
+        self.capacidad = int(capacidad_de_colas)
         self.usage = 0
         self.list = []
 
@@ -26,14 +26,14 @@ class queue_layer(object):
         Constructor
         
         '''
-        self.numero_de_colas = numero_de_colas
+        self.numero_de_colas = int(numero_de_colas)
         self.tasa_de_abandono = tasa_de_abandono
         self.queue_list = [] #idea similar eal server_list
         self.llegadas = 0
         self.atendidos = 0
         self.abandonos = 0
-        for x in range(0,numero_de_colas):
-            self.queue_list.append(queue(capacidad_de_colas)) #el 0 es el uso inicial de la cola, por otro lado el arreglo final corresponde a los tiempos de abandono de cada usuario en la cola
+        for x in range(0,int(numero_de_colas)):
+            self.queue_list.append(queue(int(capacidad_de_colas))) #el 0 es el uso inicial de la cola, por otro lado el arreglo final corresponde a los tiempos de abandono de cada usuario en la cola
     
     def select_queue(self): #metodo decide a que cola enviar al usuario entrante (enviedo desde el server), si todas las colas estan en la pasta entonses botar la coneccion (bloqueo)
         return random.choice(range(0,self.numero_de_colas))

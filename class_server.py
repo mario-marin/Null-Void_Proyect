@@ -8,7 +8,7 @@ Created on 04-06-2018
 class server:
     def __init__(self,capacity):
         self.usage = 0
-        self.capacity = capacity
+        self.capacity = int(capacity)
 
 class server_layer(object):
     '''
@@ -20,11 +20,11 @@ class server_layer(object):
         '''
         Constructor
         '''
-        self.number_of_servers = number_of_servers
-        self.capacity = capacity
+        self.number_of_servers = int(number_of_servers)
+        self.capacity = int(capacity)
         self.server_list = [] #arreglo donde cada indice reŕecenta un servidor, y cada indice contiene informacion de ese servidor (por ahora solo su tasa de atencion, numero de bloqueos y capacidad total)
-        for x in range(0,number_of_servers):
-            self.server_list.append(server(capacity))
+        for x in range(0,int(number_of_servers)):
+            self.server_list.append(server(int(capacity)))
        
        
        
