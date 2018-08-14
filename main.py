@@ -39,8 +39,8 @@ if __name__ == '__main__':
         
     #-------------------init block-----------------------
     sim_time = 0
-    alfa = 2000 #tasa de arrivos (mientra mas ma rapido) 
-    beta = 50  #tasa de salidas
+    alfa = 200000 #tasa de arrivos (mientra mas ma rapido) 
+    beta = 500  #tasa de salidas
     
     events.push_event(1, None, exp_rand(alfa))
     
@@ -85,6 +85,7 @@ if __name__ == '__main__':
                 id_queue = queues.select_queue_2(queues.not_empty_queue_list()) #se seleciona fila no vacia
                 queues.pop_queue(id_queue) #se saca un man de esa fila selecionada
                 events.push_event(0, current_event[1], sim_time+exp_rand(beta)) #se agrega salida
+                #print(queues.queue_list[0].list)
             atendidos = atendidos + 1 #aumenta el numero de manes atendidos satisfactoriamente
     
     print("arrivals: " + str(arrivals))
