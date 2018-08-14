@@ -92,4 +92,9 @@ if __name__ == '__main__':
     print("atendidos: " + str(atendidos))
     print("Tasa de blokeo: "+str(bloked/atendidos))
     print("Probabilidad de blokeo: "+ str(bloked/arrivals))
+    print("Numero de usuarios que entraron a las colas: "+ str(queues.llegadas))
+    print("Numero de usuarios que abandonaron a las colas: "+ str(queues.abandonos))
+    print("Numero de usuarios que fueron atendidos desde las colas: "+ str(queues.atendidos))
+    print("probabilidad de abandono: " +str(queues.abandonos/queues.llegadas))
+    
     pass

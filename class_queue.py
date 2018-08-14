@@ -29,6 +29,9 @@ class queue_layer(object):
         self.numero_de_colas = numero_de_colas
         self.tasa_de_abandono = tasa_de_abandono
         self.queue_list = [] #idea similar eal server_list
+        self.llegadas = 0
+        self.atendidos = 0
+        self.abandonos = 0
         for x in range(0,numero_de_colas):
             self.queue_list.append(queue(capacidad_de_colas)) #el 0 es el uso inicial de la cola, por otro lado el arreglo final corresponde a los tiempos de abandono de cada usuario en la cola
     
@@ -68,12 +71,14 @@ class queue_layer(object):
         self.queue_list[queue_id].usage = self.queue_list[queue_id].usage + 1
         self.queue_list[queue_id].list.append(desertion_time)
         self.queue_list[queue_id].list.sort()
+        self.llegadas = self.llegadas + 1
         #print("fucker added to queue")
         
     def pop_queue(self,queue_id): #metodo ingresa a el usuario siguiente a el sistema (este usuario debe ser atendido y no puede ser rechazado por el server)
         self.queue_list[queue_id].usage = self.queue_list[queue_id].usage - 1
         #print(self.queue_list[queue_id].list.pop(0))
         self.queue_list[queue_id].list.pop(0)
+        self.atendidos = self.atendidos + 1
         
     def update_queue(self,sim_time):
         
@@ -88,5 +93,6 @@ class queue_layer(object):
                 index  = index - 1
                 self.queue_list[x].usage = self.queue_list[x].usage - 1
                 self.queue_list[x].list.pop(0)
+                self.abandonos = self.abandonos + 1
     
         
