@@ -64,22 +64,23 @@ class queue_layer(object):
     
         
     def add_to_queue(self,queue_id,sim_time):
-        desertion_time = numpy.random.exponential(self.tasa_de_abandono) + sim_time
+        desertion_time = numpy.random.exponential(1/self.tasa_de_abandono) + sim_time
         self.queue_list[queue_id].usage = self.queue_list[queue_id].usage + 1
         self.queue_list[queue_id].list.append(desertion_time)
         self.queue_list[queue_id].list.sort()
-        print("fucker added to queue")
+        #print("fucker added to queue")
         
     def pop_queue(self,queue_id): #metodo ingresa a el usuario siguiente a el sistema (este usuario debe ser atendido y no puede ser rechazado por el server)
         self.queue_list[queue_id].usage = self.queue_list[queue_id].usage - 1
-        print(self.queue_list[queue_id].list.pop(0))
+        #print(self.queue_list[queue_id].list.pop(0))
+        self.queue_list[queue_id].list.pop(0)
         
     def update_queue(self,sim_time):
         
         for x in range(0,self.numero_de_colas):
             index = 0
             for i in range(0,self.queue_list[x].usage):
-                if self.queue_list[x].list[i] < sim_time:
+                if self.queue_list[x].list[i] > sim_time: #se miden los que abandonan
                     index = index + 1
                 else:
                     break
