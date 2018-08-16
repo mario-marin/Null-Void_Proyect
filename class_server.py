@@ -16,15 +16,14 @@ class server_layer(object):
     '''
 
 
-    def __init__(self, number_of_servers, capacity):
+    def __init__(self, serverCaps):
         '''
         Constructor
         '''
-        self.number_of_servers = int(number_of_servers)
-        self.capacity = int(capacity)
+        self.number_of_servers = len(serverCaps)
         self.server_list = [] #arreglo donde cada indice reŕecenta un servidor, y cada indice contiene informacion de ese servidor (por ahora solo su tasa de atencion, numero de bloqueos y capacidad total)
-        for x in range(0,int(number_of_servers)):
-            self.server_list.append(server(int(capacity)))
+        for x in serverCaps:
+            self.server_list.append(server(x))
        
        
        

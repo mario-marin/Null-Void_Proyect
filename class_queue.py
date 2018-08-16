@@ -21,19 +21,19 @@ class queue_layer(object):
     '''
 
 
-    def __init__(self, numero_de_colas, capacidad_de_colas, tasa_de_abandono):
+    def __init__(self, queuesCap, tasa_de_abandono):
         '''
         Constructor
         
         '''
-        self.numero_de_colas = int(numero_de_colas)
+        self.numero_de_colas = len(queuesCap)
         self.tasa_de_abandono = tasa_de_abandono
         self.queue_list = [] #idea similar eal server_list
         self.llegadas = 0
         self.atendidos = 0
         self.abandonos = 0
-        for x in range(0,int(numero_de_colas)):
-            self.queue_list.append(queue(int(capacidad_de_colas))) #el 0 es el uso inicial de la cola, por otro lado el arreglo final corresponde a los tiempos de abandono de cada usuario en la cola
+        for x in queuesCap:
+            self.queue_list.append(queue(x)) #el 0 es el uso inicial de la cola, por otro lado el arreglo final corresponde a los tiempos de abandono de cada usuario en la cola
     
     def select_queue(self): #metodo decide a que cola enviar al usuario entrante (enviedo desde el server), si todas las colas estan en la pasta entonses botar la coneccion (bloqueo)
         return random.choice(range(0,self.numero_de_colas))

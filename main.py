@@ -29,9 +29,6 @@ def save_results(temp_data):
     f= open("./saved_timelines/"+file+".txt","w+")
     f.write("#timeline created on: "+file_time+"\n")
     
-    
-    
-
 
 
 if __name__ == '__main__':
@@ -47,11 +44,12 @@ if __name__ == '__main__':
     arrivals = 0
     
     #---------------config load block--------------------
-    data = config_loader.load_config()
+    
+    [server_caps, queue_caps] = config_loader.load_config("./config.txt")
     events = scheduler() 
-    servers = server_layer(data[0][0], data[0][1])
-    queues = queue_layer(data[1][0],data[1][1],data[1][2])
-    switch = balancer(data[0][0])
+    servers = server_layer(server_caps)
+    queues = queue_layer(queue_caps, 100)
+    switch = balancer(len(server_caps))
         
     #-------------------init block-----------------------
     sim_time = 0
@@ -78,6 +76,7 @@ if __name__ == '__main__':
     
     while (IC > ER):
     
+
         current_event = events.pop_event()
         if current_event[2] != sim_time:
             sim_time = current_event[2]
