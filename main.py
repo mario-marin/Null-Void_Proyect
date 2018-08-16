@@ -12,6 +12,7 @@ import not_porn
 import sys
 import numpy
 import math
+import os
 from datetime import datetime
 
 
@@ -19,18 +20,34 @@ from datetime import datetime
 def exp_rand(rate):
     return numpy.random.exponential(1/rate)
 
-def save_results(temp_data):
-    file=str(datetime.now())
-    file_time = file
-    file=file.replace(" ", "_")
-    file=file.replace(":", "-")
-    file=file.replace(".", "-")
+def save_results(temp_data, path):
     
-    f= open("./saved_timelines/"+file+".txt","w+")
-    f.write("#timeline created on: "+file_time+"\n")
+    file_time = str(datetime.now())
+    file = str(datetime.now())
+    file = file.replace(" ", "_")
+    file = file.replace(":", "-")
+    file = file.replace(".", "-")
     
+    if(not os.path.exists(path)):
+        os.mkdir(path)
+ 
+    f = open(path + file + ".txt","w+")
+    
+    lines = ["#timeline created on: "+ file_time + "\n", 
+             "Llegadas: " + str(temp_data[0]) + "\n",
+             "Bloqueos: " + str(temp_data[1]) + "\n",
+             "Usuarios atendidos: " + str(temp_data[2]) + "\n",
+             "Tasa de bloqueo: "+ str(temp_data[3]) + "\n",
+             "Probabilidad de blokeo: " + str(temp_data[4]) + "\n",
+             "Numero de usuarios que entraron a las colas: " + str(temp_data[5]) + "\n",
+             "Numero de usuarios que abandonaron a las colas: " + str(temp_data[6]) + "\n",
+             "Numero de usuarios que fueron atendidos desde las colas: " + str(temp_data[7]) + "\n",
+             "Probabilidad de abandono: " + str(temp_data[8]) + "\n"]
+            
 
-
+    f.writelines(lines) 
+    f.close()
+    
 if __name__ == '__main__':
     if len(sys.argv) == 2:
         not_porn.beautiful_thig(sys.argv[1])
@@ -67,7 +84,7 @@ if __name__ == '__main__':
     bloked = 0
     
     z_alfa_2 = 3.08 # 99.9% de confiavilidad
-    RE_dato = 0.001 # 0.1% de error
+    RE_dato = 0.1 # 0.1% de error
     
     
     IC = 1000000
@@ -128,7 +145,7 @@ if __name__ == '__main__':
     print("probabilidad de abandono: " +str(queues.abandonos/queues.llegadas))
     
     temp_data = [arrivals,bloked,atendidos,bloked/atendidos,bloked/arrivals,queues.llegadas,queues.abandonos,queues.atendidos,queues.abandonos/queues.llegadas]
-    
+    save_results(temp_data, "./saved_timelines/")
     
     
     pass
