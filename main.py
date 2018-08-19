@@ -83,9 +83,10 @@ if __name__ == '__main__':
     atendidos = 0
     bloked = 0
     
-    z_alfa_2 = 3.08 # 99.9% de confiavilidad
-    RE_dato = 0.1 # 0.1% de error
-    
+    #z_alfa_2 = 3.08 # 99.9% de confiavilidad
+    #RE_dato = 0.001 # 0.1% de error
+    z_alfa_2 = 2.575 # 99.0% de confiavilidad
+    RE_dato = 0.01 # 1.0% de error
     
     IC = 1000000
     ER = 100
@@ -132,7 +133,7 @@ if __name__ == '__main__':
         prob = bloked/arrivals
         if prob != 0 and prob != 1:
             IC = z_alfa_2 * math.sqrt(prob*(1-prob)/arrivals)
-        ER = prob*RE_dato/2
+        ER = prob*RE_dato/2.0
     
     print("arrivals: " + str(arrivals))
     print("bloked: " + str(bloked))
