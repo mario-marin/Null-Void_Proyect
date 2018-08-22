@@ -52,8 +52,8 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         not_porn.beautiful_thig(sys.argv[1])
     else:
-        if len(sys.argv) != 3:
-            print("Usage: python main.py {tasa de llegada (float)} {tasa de salida(float)}")
+        if len(sys.argv) != 4:
+            print("Usage: python main.py {tasa de llegada (float)} {tasa de salida(float)} {tasa de abandono(float)}")
             sys.exit(0)
         
         
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     [server_caps, queue_caps] = config_loader.load_config("./config.txt")
     events = scheduler() 
     servers = server_layer(server_caps)
-    queues = queue_layer(queue_caps, 100)
+    queues = queue_layer(queue_caps, float(sys.argv[3]))
     switch = balancer(len(server_caps))
         
     #-------------------init block-----------------------
