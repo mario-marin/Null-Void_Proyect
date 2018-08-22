@@ -34,8 +34,8 @@ def save_results(temp_data, path):
     f = open(path + file + ".txt","w+")
     
     lines = ["#timeline created on: "+ file_time + "\n", 
-             "Llegadas: " + str(temp_data[0]) + "\n",
-             "Bloqueos: " + str(temp_data[1]) + "\n",
+             "Llegadas totales: " + str(temp_data[0]) + "\n",
+             "Usuarios bloqueos: " + str(temp_data[1]) + "\n",
              "Usuarios atendidos: " + str(temp_data[2]) + "\n",
              "Tasa de bloqueo: "+ str(temp_data[3]) + "\n",
              "Probabilidad de blokeo: " + str(temp_data[4]) + "\n",
@@ -135,15 +135,15 @@ if __name__ == '__main__':
             IC = z_alfa_2 * math.sqrt(prob*(1-prob)/arrivals)
         ER = prob*RE_dato/2.0
     
-    print("arrivals: " + str(arrivals))
-    print("bloked: " + str(bloked))
-    print("atendidos: " + str(atendidos))
+    print("Llegadas totales: " + str(arrivals))
+    print("Usuarios blokeados: " + str(bloked))
+    print("Usuarios atendidos: " + str(atendidos))
     print("Tasa de blokeo: "+str(bloked/atendidos))
     print("Probabilidad de blokeo: "+ str(bloked/arrivals))
     print("Numero de usuarios que entraron a las colas: "+ str(queues.llegadas))
     print("Numero de usuarios que abandonaron a las colas: "+ str(queues.abandonos))
     print("Numero de usuarios que fueron atendidos desde las colas: "+ str(queues.atendidos))
-    print("probabilidad de abandono: " +str(queues.abandonos/queues.llegadas))
+    print("Probabilidad de abandono: " +str(queues.abandonos/queues.llegadas))
     
     temp_data = [arrivals,bloked,atendidos,bloked/atendidos,bloked/arrivals,queues.llegadas,queues.abandonos,queues.atendidos,queues.abandonos/queues.llegadas]
     save_results(temp_data, "./saved_timelines/")
