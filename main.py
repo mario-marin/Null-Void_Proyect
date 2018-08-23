@@ -42,7 +42,8 @@ def save_results(temp_data, path):
              "Numero de usuarios que entraron a las colas: " + str(temp_data[5]) + "\n",
              "Numero de usuarios que abandonaron a las colas: " + str(temp_data[6]) + "\n",
              "Numero de usuarios que fueron atendidos desde las colas: " + str(temp_data[7]) + "\n",
-             "Probabilidad de abandono: " + str(temp_data[8]) + "\n"]
+             "Probabilidad de abandono: " + str(temp_data[8]) + "\n",
+             "Probabilidad de no atencion: " + str(temp_data[9]) + "\n"]
             
 
     f.writelines(lines) 
@@ -57,8 +58,14 @@ if __name__ == '__main__':
             sys.exit(0)
         
         
-    stop_condition = int(sys.argv[1])
     arrivals = 0
+    
+    
+    
+    '''
+    for x in range(0,100):
+        print(numpy.random.exponential(1/float(sys.argv[3])))
+    '''
     
     #---------------config load block--------------------
     
@@ -85,16 +92,16 @@ if __name__ == '__main__':
     
     #z_alfa_2 = 3.08 # 99.9% de confiavilidad
     #RE_dato = 0.001 # 0.1% de error
-    z_alfa_2 = 2.575 # 99.0% de confiavilidad
-    RE_dato = 0.01 # 1.0% de error
+    #z_alfa_2 = 2.575 # 99.0% de confiavilidad
+    z_alfa_2 =  1.96 # 95.0% de confiavilidad
+    RE_dato = 0.05 # 5.0% de error
     
     IC = 1000000
     ER = 100
     
+    print_flag = 0
     
     while (IC > ER):
-    
-
         current_event = events.pop_event()
         if current_event[2] != sim_time:
             sim_time = current_event[2]
@@ -106,6 +113,7 @@ if __name__ == '__main__':
         
         
         if current_event[0] == 1:
+            print_flag = print_flag + 1 
             arrivals = arrivals + 1 #se aumenta las llegadas
             server_id = switch.assign_load(servers.available_servers_list_query()) #selecion de server
             events.push_event(1, None, sim_time+exp_rand(alfa)) #nueva llegada
@@ -130,10 +138,15 @@ if __name__ == '__main__':
                 events.push_event(0, current_event[1], sim_time+exp_rand(beta)) #se agrega salida
                 #print(queues.queue_list[0].list)
             atendidos = atendidos + 1 #aumenta el numero de manes atendidos satisfactoriamente
-        prob = bloked/arrivals
-        if prob != 0 and prob != 1:
-            IC = z_alfa_2 * math.sqrt(prob*(1-prob)/arrivals)
-        ER = prob*RE_dato/2.0
+        prob = (bloked+queues.abandonos)/arrivals
+        if prob != 0:
+            IC = prob + z_alfa_2 * math.sqrt(prob*(1-prob)/arrivals)
+            ER = prob + prob*RE_dato/2.0
+        
+        if(print_flag == 100000):
+            print(IC-ER)
+            print_flag = 0;
+            
     
     print("Llegadas totales: " + str(arrivals))
     print("Usuarios blokeados: " + str(bloked))
@@ -144,8 +157,9 @@ if __name__ == '__main__':
     print("Numero de usuarios que abandonaron a las colas: "+ str(queues.abandonos))
     print("Numero de usuarios que fueron atendidos desde las colas: "+ str(queues.atendidos))
     print("Probabilidad de abandono: " +str(queues.abandonos/queues.llegadas))
+    print("Probabilidad de no atencion: " +str(prob))
     
-    temp_data = [arrivals,bloked,atendidos,bloked/atendidos,bloked/arrivals,queues.llegadas,queues.abandonos,queues.atendidos,queues.abandonos/queues.llegadas]
+    temp_data = [arrivals,bloked,atendidos,bloked/atendidos,bloked/arrivals,queues.llegadas,queues.abandonos,queues.atendidos,queues.abandonos/queues.llegadas,prob]
     save_results(temp_data, "./saved_timelines/")
     
     

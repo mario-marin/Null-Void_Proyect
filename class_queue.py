@@ -70,7 +70,7 @@ class queue_layer(object):
     def add_to_queue(self,queue_id,sim_time):
         desertion_time = numpy.random.exponential(1/self.tasa_de_abandono) + sim_time
         self.queue_list[queue_id].usage = self.queue_list[queue_id].usage + 1
-        #print(self.queue_list[queue_id].usage )
+        #print(str(desertion_time) + "    " + str(sim_time) )
         self.queue_list[queue_id].list.append(desertion_time)
         self.queue_list[queue_id].list.sort()
         self.llegadas = self.llegadas + 1
@@ -78,8 +78,10 @@ class queue_layer(object):
         
     def pop_queue(self,queue_id): #metodo ingresa a el usuario siguiente a el sistema (este usuario debe ser atendido y no puede ser rechazado por el server)
         self.queue_list[queue_id].usage = self.queue_list[queue_id].usage - 1
-        #print(self.queue_list[queue_id].list.pop(0))
-        self.queue_list[queue_id].list.pop(0)
+        index = random.randrange(len(self.queue_list[queue_id].list))
+        #print(index)
+        #self.queue_list[queue_id].list.pop(0)
+        self.queue_list[queue_id].list.pop(index)
         self.atendidos = self.atendidos + 1
         
     def update_queue(self,sim_time):
@@ -89,7 +91,7 @@ class queue_layer(object):
             #print("potato")
             for i in range(0,self.queue_list[x].usage):
                 #print("tiempo abandono: " + str(self.queue_list[x].list[i])+"  "+"sim time: "+str(sim_time))
-                if self.queue_list[x].list[i] < sim_time: #se miden los que abandonan
+                if self.queue_list[x].list[i] <= sim_time: #se miden los que abandonan
                     index = index + 1
                 else:
                     break
