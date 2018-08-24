@@ -38,12 +38,12 @@ def save_results(temp_data, path):
              "Usuarios bloqueos: " + str(temp_data[1]) + "\n",
              "Usuarios atendidos: " + str(temp_data[2]) + "\n",
              "Tasa de bloqueo: "+ str(temp_data[3]) + "\n",
-             "Probabilidad de blokeo: " + str(temp_data[4]) + "\n",
              "Numero de usuarios que entraron a las colas: " + str(temp_data[5]) + "\n",
              "Numero de usuarios que abandonaron a las colas: " + str(temp_data[6]) + "\n",
              "Numero de usuarios que fueron atendidos desde las colas: " + str(temp_data[7]) + "\n",
              "Probabilidad de abandono: " + str(temp_data[8]) + "\n",
-             "Probabilidad de no atencion: " + str(temp_data[9]) + "\n"]
+             "Probabilidad de no atencion: " + str(temp_data[9]) + "\n",
+             "Probabilidad de blokeo: " + str(temp_data[4]) + "\n"]
             
 
     f.writelines(lines) 
@@ -77,8 +77,6 @@ if __name__ == '__main__':
         
     #-------------------init block-----------------------
     sim_time = 0
-    #alfa = 20000 #tasa de arrivos (mientra mas ma rapido) 
-    #beta = 50  #tasa de salidas
     
     alfa = float(sys.argv[1])
     beta = float(sys.argv[2])
@@ -90,9 +88,6 @@ if __name__ == '__main__':
     atendidos = 0
     bloked = 0
     
-    #z_alfa_2 = 3.08 # 99.9% de confiavilidad
-    #RE_dato = 0.001 # 0.1% de error
-    #z_alfa_2 = 2.575 # 99.0% de confiavilidad
     z_alfa_2 =  1.96 # 95.0% de confiavilidad
     RE_dato = 0.05 # 5.0% de error
     
@@ -107,9 +102,7 @@ if __name__ == '__main__':
             sim_time = current_event[2]
         
         queues.update_queue(sim_time)
-        
-        #print(sim_time)
-        #print(queues.queue_list[0].list)
+
         
         
         if current_event[0] == 1:
@@ -117,45 +110,41 @@ if __name__ == '__main__':
             arrivals = arrivals + 1 #se aumenta las llegadas
             server_id = switch.assign_load(servers.available_servers_list_query()) #selecion de server
             events.push_event(1, None, sim_time+exp_rand(alfa)) #nueva llegada
-            #print("llegada")
             if servers.server_full_query(server_id): #servidor lleno?
                 id_queue = queues.select_queue() #selecionar fila
                 if queues.queue_full_query(id_queue): #fila llena?
                     bloked = bloked + 1 #blokeado
-                    #print("bloked user")
                 else:
                     queues.add_to_queue(id_queue, sim_time+sim_time) # se agrega a fila
             else:
                 servers.increase_usage(server_id) #se atiende al man, aumenta el uso del server
                 events.push_event(0, server_id, sim_time+exp_rand(beta)) #se genera salida
         else:
-            #print("salida")
             if len(queues.not_empty_queue_list()) == 0: #las fials estan vacias?
                 servers.decrease_usage(current_event[1]) #se disminulle el uso del server
             else:
                 id_queue = queues.select_queue_2(queues.not_empty_queue_list()) #se seleciona fila no vacia
                 queues.pop_queue(id_queue) #se saca un man de esa fila selecionada
                 events.push_event(0, current_event[1], sim_time+exp_rand(beta)) #se agrega salida
-                #print(queues.queue_list[0].list)
             atendidos = atendidos + 1 #aumenta el numero de manes atendidos satisfactoriamente
         prob = (bloked+queues.abandonos)/arrivals
         if prob != 0:
             IC = prob + z_alfa_2 * math.sqrt(prob*(1-prob)/arrivals)
             ER = prob + prob*RE_dato/2.0
-        
+        '''
         if(print_flag == 100000):
             print(IC-ER)
             print_flag = 0;
-            
+        '''   
     
     print("Llegadas totales: " + str(arrivals))
     print("Usuarios blokeados: " + str(bloked))
     print("Usuarios atendidos: " + str(atendidos))
     print("Tasa de blokeo: "+str(bloked/atendidos))
-    print("Probabilidad de blokeo: "+ str(bloked/arrivals))
     print("Numero de usuarios que entraron a las colas: "+ str(queues.llegadas))
     print("Numero de usuarios que abandonaron a las colas: "+ str(queues.abandonos))
     print("Numero de usuarios que fueron atendidos desde las colas: "+ str(queues.atendidos))
+    print("Probabilidad de blokeo: "+ str(bloked/arrivals))
     print("Probabilidad de abandono: " +str(queues.abandonos/queues.llegadas))
     print("Probabilidad de no atencion: " +str(prob))
     
